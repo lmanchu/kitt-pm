@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://kitt:password@postgres:5432/kitt_pm
+      - REDIS_URL=redis://redis:6379
+      - SLACK_CLIENT_ID=${SLACK_CLIENT_ID}
+      - SLACK_CLIENT_SECRET=${SLACK_CLIENT_SECRET}
+      - SLACK_SIGNING_SECRET=${SLACK_SIGNING_SECRET}
+      - SLACK_STATE_SECRET=${SLACK_STATE_SECRET}
+      - AI_PROVIDER=${AI_PROVIDER}
+      - AI_MODEL=${AI_MODEL}
+      - AI_API_KEY=${AI_API_KEY}
+      - PORT=3000
+      - CLIPROXY_URL=${CLIPROXY_URL}
+      - CLIPROXY_API_KEY=${CLIPROXY_API_KEY}
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: kitt_pm
+      POSTGRES_USER: kitt
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:

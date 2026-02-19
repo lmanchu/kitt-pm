@@ -1,0 +1,17 @@
+{
+  "clawdbot": {
+    "name": "kitt-pm",
+    "version": "0.1.0",
+    "description": "AI PM co-pilot for Slack — context bridge, memory, cross-workspace sync",
+    "author": "IrisGo",
+    "category": "productivity",
+    "entrypoint": "src/app.js",
+    "env": [
+      "SLACK_BOT_TOKEN",
+      "SLACK_SIGNING_SECRET",
+      "DATABASE_URL",
+      "AI_PROVIDER",
+      "AI_API_KEY"
+    ]
+  }
+}
