@@ -12,7 +12,7 @@ const receiver = new ExpressReceiver({
   installationStore,
   redirectUri: process.env.SLACK_REDIRECT_URI,
   installerOptions: {
-    // redirect to a page after installation
+    redirectUriPath: '/slack/oauth_redirect',
     redirectUriSuccess: process.env.SLACK_INSTALL_SUCCESS_URL,
     redirectUriFailure: process.env.SLACK_INSTALL_FAILURE_URL,
   },
