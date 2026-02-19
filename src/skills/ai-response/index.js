@@ -43,6 +43,7 @@ async function callAI(userMessage) {
 }
 
 const register = (app) => {
+  // Handle @mentions in channels
   app.event('app_mention', async ({ event, say }) => {
     const userMessage = event.text.replace(/<@[A-Z0-9]+>/g, '').trim();
 
@@ -57,6 +58,23 @@ const register = (app) => {
     } catch (error) {
       console.error(`[ai-response] Error: ${error.message}`);
       await say({ text: '⚠️ Something went wrong. Please try again.', thread_ts: event.ts });
+    }
+  });
+
+  // Handle direct messages
+  app.message(async ({ message, say }) => {
+    // Only handle DMs (channel_type: 'im'), skip bot messages and thread replies
+    if (message.channel_type !== 'im' || message.bot_id || message.subtype) return;
+
+    const userMessage = (message.text || '').trim();
+    if (!userMessage) return;
+
+    try {
+      const reply = await callAI(userMessage);
+      await say({ text: reply });
+    } catch (error) {
+      console.error(`[ai-response] DM Error: ${error.message}`);
+      await say({ text: '⚠️ Something went wrong. Please try again.' });
     }
   });
 };
